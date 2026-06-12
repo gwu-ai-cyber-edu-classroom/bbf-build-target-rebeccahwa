@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ drawing['title'] }}</h1>
+<div style="font-size:.85rem;color:#888">drawing #{{ drawing['id'] }} · {{ drawing['created'] }}</div>
+<p><img src="{{ drawing['image'] }}" alt="{{ drawing['title'] }}" style="max-width:100%;border:1px solid #ccc;border-radius:6px;margin-top:1rem"></p>
+<p><a href="{{ url_for('gallery') }}">← Back to my pictures</a></p>
+{% endblock %}

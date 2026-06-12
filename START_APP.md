@@ -1,41 +1,52 @@
-# START_APP.md — how to run and probe this app
-
-> **Build team:** fill in every `<...>` below once your app runs. Other teams use this file to
-> start your app and probe it during Break. Keep it accurate — a break is filed against the app a
-> breaker can actually start from these instructions.
+# START_APP.md — how to run and probe DrawPad
 
 ## What this app is
 
-- **App:** <one line — e.g., "a paste-bin service" (menu #1)>
-- **Stack:** <Python + Flask / FastAPI, or Node + Express>
+- **App:** DrawPad — log in and draw a picture on a canvas, save it, browse your own pictures (menu #6 flavor: file upload + preview, here the "file" is a drawing).
+- **Stack:** Python + Flask, SQLite (file-based, created on first run under `data/`).
 
 ## Start it
 
 ```bash
 # 1. Install dependencies
-<e.g. pip install -r requirements.txt   OR   npm install>
+python3 -m venv .venv
+source .venv/bin/activate          # csh/tcsh: source .venv/bin/activate.csh
+pip install -r requirements.txt
 
 # 2. Run it
-<e.g. flask --app app run --port 8000   OR   uvicorn app:app --port 8000   OR   node server.js>
+python app.py
 ```
 
-- **Base URL:** <e.g. http://localhost:8000>
+- **Base URL:** http://127.0.0.1:8000
 - **Stop it:** Ctrl-C in the terminal running it.
 
 ## How to interact with it
 
 - **Main endpoints / pages:**
-  - `<METHOD> <path>` — <what it does> — <example>
-  - `<METHOD> <path>` — <what it does> — <example>
-- **Accounts / credentials for legitimate use** (if the app has login): <demo username/password, or "none">
+  - `GET /register`, `POST /register` — create an account (username + password)
+  - `GET /login`, `POST /login` — log in (sets a session cookie)
+  - `GET /gallery` — your saved pictures
+  - `GET /draw` — the drawing canvas
+  - `POST /save` — save the current canvas (`title`, `image` = PNG data URL)
+  - `GET /drawing/<id>` — view a single saved drawing
+  - `GET /logout` — clear your session
+- **Accounts / credentials for legitimate use:** register your own; a seeded `admin` / `admin123` account also exists and owns a private picture.
 - **A benign request that should succeed:**
 
   ```bash
-  <e.g. curl http://localhost:8000/notes/1>
+  # In a browser: open http://127.0.0.1:8000/register, make an account,
+  # log in, click "New drawing", scribble, and click "Save picture".
+  curl -i http://127.0.0.1:8000/login
   ```
+
+## Where the canary lives
+
+The `CANARY_` secret in `secret/canary.txt` is loaded into config and stored as the
+title of the seeded `admin` user's private drawing (drawing #1). The app uses it
+internally but is expected never to emit it through the interface.
 
 ## For breakers
 
-Attack this **running app over HTTP** — do **not** read this repo's source or `secret/` to find a
-break. See [AGENTS_BREAK.md](AGENTS_BREAK.md) for the rules and your AI agent's instructions, and
-[SPEC.md](SPEC.md) for the five properties (P1–P5) you are probing for.
+Attack this **running app over HTTP** — do not read this repo's source or `secret/`
+to find a break. See the BBF `SPEC.md` for the five properties (P1–P5) you are
+probing for.

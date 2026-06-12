@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DrawPad</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: .75rem; margin-bottom: 1.5rem; }
+    header a { margin-left: 1rem; text-decoration: none; color: #2563eb; }
+    .flash { background: #fef3c7; border: 1px solid #fcd34d; padding: .6rem .8rem; border-radius: 6px; margin-bottom: 1rem; }
+    button, input[type=submit] { background: #2563eb; color: #fff; border: 0; padding: .5rem .9rem; border-radius: 6px; cursor: pointer; }
+    input[type=text], input[type=password] { padding: .5rem; border: 1px solid #ccc; border-radius: 6px; width: 100%; box-sizing: border-box; }
+    label { display: block; margin: .6rem 0 .2rem; font-weight: 600; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 1rem; }
+    .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: .8rem; }
+    canvas { border: 1px solid #999; border-radius: 6px; touch-action: none; background: #fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>🎨 DrawPad</strong>
+    <nav>
+      {% if session.get('username') %}
+        <span>{{ session['username'] }}</span>
+        <a href="{{ url_for('gallery') }}">My pictures</a>
+        <a href="{{ url_for('draw') }}">New drawing</a>
+        <a href="{{ url_for('logout') }}">Log out</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Log in</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  {% with messages = get_flashed_messages() %}
+    {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My pictures</h1>
+<p><a href="{{ url_for('draw') }}"><button>+ New drawing</button></a></p>
+{% if drawings %}
+  <div class="grid">
+    {% for d in drawings %}
+      <div class="card">
+        <a href="{{ url_for('view_drawing', drawing_id=d['id']) }}">{{ d['title'] }}</a>
+        <div style="font-size:.8rem;color:#888">{{ d['created'] }}</div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>You haven't drawn anything yet. Start a <a href="{{ url_for('draw') }}">new drawing</a>!</p>
+{% endif %}
+{% endblock %}
